@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -14,8 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model SpamBot {
-  id          String    @default(uuid()) @id
-  apiId       String
-  apiHash     String
-  phoneNumber String
+  id            String    @default(uuid()) @id
+  apiId         String
+  apiHash       String
+  phoneNumber   String
+  isAuth        Boolean
+  banStatus     Boolean
+}
+model Admin {
+  id            String    @default(uuid()) @id
+  telegramId    String    @unique
 }
