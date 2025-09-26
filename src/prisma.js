@@ -21,5 +21,28 @@ export default class PrismaService {
             return undefined
         }
     }
+
+    async createSession(spamBot){
+        return await PrismaService.prisma.spamBot.upsert({
+            where: {apiId: spamBot.apiId}, 
+            update: {
+                apiHash: spamBot.apiHash,
+                phoneNumber: spamBot.phoneNumber,
+                password: spamBot.password,
+                session: spamBot.session,
+                isAuth: spamBot.isAuth,
+                banStatus: spamBot.banStatus
+            },
+            create: {
+                apiId: spamBot.apiId,
+                apiHash: spamBot.apiHash,
+                phoneNumber: spamBot.phoneNumber,
+                password: spamBot.password,
+                session: spamBot.session,
+                isAuth: spamBot.isAuth,
+                banStatus: spamBot.banStatus
+            }
+        })
+    }
 }
 

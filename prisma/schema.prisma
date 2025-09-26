@@ -14,9 +14,11 @@ datasource db {
 }
 model SpamBot {
   id            String    @default(uuid()) @id
-  apiId         String
+  apiId         BigInt    @unique
   apiHash       String
   phoneNumber   String
+  password      String
+  session       String
   isAuth        Boolean
   banStatus     Boolean
 }
