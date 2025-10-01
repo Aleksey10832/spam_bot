@@ -24,7 +24,7 @@ export default class PrismaService {
 
     async createSession(spamBot){
         return await PrismaService.prisma.spamBot.upsert({
-            where: {apiId: spamBot.apiId}, 
+            where: {apiId: spamBot.apiId.toString()}, 
             update: {
                 apiHash: spamBot.apiHash,
                 phoneNumber: spamBot.phoneNumber,
@@ -34,7 +34,7 @@ export default class PrismaService {
                 banStatus: spamBot.banStatus
             },
             create: {
-                apiId: spamBot.apiId,
+                apiId: spamBot.apiId.toString(),
                 apiHash: spamBot.apiHash,
                 phoneNumber: spamBot.phoneNumber,
                 password: spamBot.password,
@@ -43,6 +43,16 @@ export default class PrismaService {
                 banStatus: spamBot.banStatus
             }
         })
+    }
+
+    async getAuthSessions(){
+        return await PrismaService.prisma.spamBot.findMany({where: {isAuth: true, banStatus: false}})
+    }
+    async getAuthSession(){
+        return await PrismaService.prisma.spamBot.findFirst({where: {isAuth: true, banStatus: false}})
+    }
+    async uploadUsers(users){
+        return await PrismaService.prisma.user.createMany({data: users})
     }
 }
 
