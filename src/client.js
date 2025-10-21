@@ -1,16 +1,17 @@
-    import { Telegraf } from "telegraf";
-    import { WizardScene } from "telegraf/scenes";
-    import { Stage } from "telegraf/scenes";
-    import { session } from "telegraf";
-    import PrismaService from "./prisma.js";
-    import initBot from "./initBot.js";
-    import fs, { writeFileSync } from 'fs'
-    import SpamBot from "./spambot.js";
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+import { Telegraf } from "telegraf";
+import { WizardScene } from "telegraf/scenes";
+import { Stage } from "telegraf/scenes";
+import { session } from "telegraf";
+import PrismaService from "./prisma.js";
+import initBot from "./initBot.js";
+import fs, { writeFileSync } from 'fs'
+import SpamBot from "./spambot.js";
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    async function startClientBot(){
-        const spamBot = new SpamBot()
-        const prismaService = new PrismaService()
+export default class ClientBot {
+    async startClientBot(){
+        const spamBot = new SpamBot();
+        const prismaService = new PrismaService();
         const client = new Telegraf(process.env.CLIENT_BOT_TOKEN, {handlerTimeout: 300000})
         async function guard(ctx){
             const user = await prismaService.getAdminByChatId(ctx.chat.id)
@@ -152,4 +153,12 @@
         }   
         client.launch()
     }
-    export default startClientBot
+    async sendAdminMessage(message){
+        const prismaService = new PrismaService();
+        const client = new Telegraf(process.env.CLIENT_BOT_TOKEN, {handlerTimeout: 300000})
+        const ids = await prismaService.getAdminsId()
+        ids.forEach(async (el) => {
+            await client.telegram.sendMessage(+el, message)
+        })
+    }
+}

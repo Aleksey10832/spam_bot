@@ -2,7 +2,6 @@ import PrismaService from './prisma.js';
 import { TelegramClient, Api, password } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
 import fs from 'fs'
-import { ConnectionTCPFull } from 'telegram/network/index.js';
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 export default class SpamBot{
     async checkGroupUsers(url, userId){
@@ -21,6 +20,9 @@ export default class SpamBot{
             const limitNumbr = count % 150
             let currentCount = 0
             for (let i = 0; i < Math.floor(count / 150); i++){
+                if (i == 67){
+                    break;
+                }
                 const group = await client.invoke(new Api.channels.GetParticipants({
                     channel: url, 
                     filter: new Api.ChannelParticipantsRecent(),
@@ -44,7 +46,8 @@ export default class SpamBot{
                 channel: url, 
                 filter: new Api.ChannelParticipantsRecent(),
                 offset: Math.floor(count, 150),
-                limit: limitNumbr
+                limit: limitNumbr,
+                hash: BigInt("-4156887774564"),
             }))
             await prisma.uploadUsers(group.users.map(el => {
                 return {
@@ -57,5 +60,5 @@ export default class SpamBot{
                 {count: count, isEnd: true, max: count}
             ))
         }
-    }   
+    }
 }

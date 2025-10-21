@@ -31,7 +31,9 @@ export default class PrismaService {
                 password: spamBot.password,
                 session: spamBot.session,
                 isAuth: spamBot.isAuth,
-                banStatus: spamBot.banStatus
+                banStatus: spamBot.banStatus,
+                sleepOk: spamBot.sleepOk,
+                initDate: spamBot.initDate
             },
             create: {
                 apiId: spamBot.apiId.toString(),
@@ -40,7 +42,9 @@ export default class PrismaService {
                 password: spamBot.password,
                 session: spamBot.session,
                 isAuth: spamBot.isAuth,
-                banStatus: spamBot.banStatus
+                banStatus: spamBot.banStatus,
+                sleepOk: spamBot.sleepOk,
+                initDate: spamBot.initDate
             }
         })
     }
@@ -53,6 +57,15 @@ export default class PrismaService {
     }
     async uploadUsers(users){
         return await PrismaService.prisma.user.createMany({data: users})
+    }
+    async getNotValidBots(){
+        return await PrismaService.prisma.spamBot.findMany({where: {sleepOk: false}})
+    }
+    async validationBot(id){
+        return await PrismaService.prisma.spamBot.update({where: {id: id}, data: {sleepOk: true}})
+    }
+    async getAdminsId(){
+        return (await PrismaService.prisma.admin.findMany()).map(el => el.telegramId)
     }
 }
 

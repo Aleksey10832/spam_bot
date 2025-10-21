@@ -1,4 +1,8 @@
 import dotenv from "dotenv";
 import startClientBot from "./src/client.js";
+import ClientBot from "./src/client.js";
+import sleepBot from "./src/sleepBot.js";
 dotenv.config({path: './.env'});
-startClientBot();
+sleepBot()
+const client = new ClientBot()
+client.startClientBot();

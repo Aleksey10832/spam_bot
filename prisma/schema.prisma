@@ -15,6 +15,8 @@ model SpamBot {
   session       String
   isAuth        Boolean
   banStatus     Boolean
+  sleepOk       Boolean
+  initDate      DateTime
 }
 model Admin {
   id            String    @default(uuid()) @id

@@ -33,8 +33,12 @@ const initBot = async (id) => {
       password: user.password,
       session: session,
       isAuth: true,
-      banStatus: false
+      banStatus: false,
+      sleepOk: false,
+      initDate: new Date()
     }))
-  } catch{}
+  } catch (err){
+    console.log(err)
+  }
 }
 export default initBot
